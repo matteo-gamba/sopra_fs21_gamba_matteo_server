@@ -5,6 +5,8 @@ import ch.uzh.ifi.hase.soprafs21.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs21.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs21.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,8 @@ import java.util.List;
  */
 @RestController
 public class UserController {
+
+    private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserService userService;
 
@@ -52,5 +56,18 @@ public class UserController {
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+    }
+
+    @PutMapping("/users")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseBody
+    public UserGetDTO loginUser(@RequestBody UserPostDTO userPostDTO) {
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+
+        User updatedUser = userService.checkIfCredentialsExist(userInput);
+        System.out.print("User authentication: ");
+        System.out.print(updatedUser);
+
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(updatedUser);
     }
 }
