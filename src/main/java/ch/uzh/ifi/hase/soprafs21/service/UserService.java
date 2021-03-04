@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -67,7 +68,7 @@ public class UserService {
         String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
 
         if (userByUsername != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
+            throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username", "is"));
         }
     }
 
@@ -84,5 +85,24 @@ public class UserService {
             System.out.println(this.userRepository.findByUsername(userInput.getUsername()).getStatus());
             return updated_user;
         }
+    }
+
+    public User getUserWithId(Long id) {
+        Optional<User> user = this.userRepository.findById(id);
+
+        if (user.isPresent()){
+            return user.get();
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with id="+ id +" was not found");
+    }
+
+    public User logOut(Long id) {
+        var user = this.userRepository.findById(id);
+
+        if (user.isPresent()){
+            user.get().setStatus(UserStatus.OFFLINE);
+            return this.userRepository.findById(id).get();
+        }
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with id="+ id +" was not found");
     }
 }

@@ -44,6 +44,16 @@ public class UserController {
         return userGetDTOs;
     }
 
+    @GetMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserGetDTO getUserWithId(@PathVariable("id") Long id) {
+
+        User user = userService.getUserWithId(id);
+
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+    }
+
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
@@ -70,4 +80,15 @@ public class UserController {
 
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(updatedUser);
     }
+
+    @PutMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public UserGetDTO logoutUser(@PathVariable("id") Long id) {
+
+        User offlineUser = userService.logOut(id);
+
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(offlineUser);
+    }
+
 }
