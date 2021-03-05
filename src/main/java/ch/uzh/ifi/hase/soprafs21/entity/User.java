@@ -38,6 +38,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     private LocalDate creationDate;
 
+    @Column(nullable = true)
+    private String birthdate;
+
     public String getPassword() {
         return password;
     }
@@ -84,5 +87,13 @@ public class User implements Serializable {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
     }
 }

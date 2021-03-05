@@ -91,4 +91,25 @@ public class UserController {
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(offlineUser);
     }
 
+    @PostMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public UserGetDTO modifyUser(@PathVariable("id") Long id, @RequestBody UserPostDTO userPostDTO) {
+
+        System.out.println("I'm in modifyuser()");
+
+        // convert API user to internal representation
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+
+        System.out.println(userInput.getUsername());
+        System.out.println(userInput.getPassword());
+        System.out.println(userInput.getBirthdate());
+
+        // modify user
+        User user = userService.modifyUser(id, userInput);
+
+        // convert internal representation of user back to API
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(userInput);
+    }
+
 }

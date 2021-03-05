@@ -105,4 +105,18 @@ public class UserService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with id="+ id +" was not found");
     }
+
+    public User modifyUser(Long id, User userInput) {
+        var userToBeModified = this.userRepository.findById(id);
+        if (userToBeModified.isPresent()) {
+            log.info("User has been modified: {}", userToBeModified);
+            userToBeModified.get().setUsername(userInput.getUsername());
+            log.info(userInput.getBirthdate().toString());
+            userToBeModified.get().setBirthdate(userInput.getBirthdate());
+            return userToBeModified.get();
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User with ID %d was not found.", id));
+    }
+
 }
