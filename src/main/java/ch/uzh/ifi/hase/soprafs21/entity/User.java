@@ -39,7 +39,7 @@ public class User implements Serializable {
     private LocalDate creationDate;
 
     @Column(nullable = true)
-    private String birthdate;
+    private LocalDate birthdate;
 
     public String getPassword() {
         return password;
@@ -89,11 +89,11 @@ public class User implements Serializable {
         this.creationDate = creationDate;
     }
 
-    public String getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 }

@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs21.rest.dto;
 
 import ch.uzh.ifi.hase.soprafs21.constant.UserStatus;
+import org.apache.tomcat.jni.Local;
+
 import java.time.LocalDate;
 
 public class UserGetDTO {
@@ -10,7 +12,8 @@ public class UserGetDTO {
     private String username;
     private UserStatus status;
     private LocalDate creationDate;
-    private String birthdate;
+    private LocalDate birthdate;
+    private String token;
 
     public Long getId() {
         return id;
@@ -52,12 +55,20 @@ public class UserGetDTO {
         this.creationDate = creationDate;
     }
 
-    public String getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
 

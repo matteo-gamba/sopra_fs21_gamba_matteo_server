@@ -32,7 +32,8 @@ public class UserController {
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<UserGetDTO> getAllUsers() {
+    public List<UserGetDTO> getAllUsers(@RequestHeader("token") String token) {
+        userService.authenticateToken(token);
         // fetch all users in the internal representation
         List<User> users = userService.getUsers();
         List<UserGetDTO> userGetDTOs = new ArrayList<>();
@@ -47,7 +48,8 @@ public class UserController {
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public UserGetDTO getUserWithId(@PathVariable("id") Long id) {
+    public UserGetDTO getUserWithId(@PathVariable("id") Long id, @RequestHeader("token") String token) {
+        userService.authenticateToken(token);
 
         User user = userService.getUserWithId(id);
 
@@ -84,7 +86,8 @@ public class UserController {
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public UserGetDTO logoutUser(@PathVariable("id") Long id) {
+    public UserGetDTO logoutUser(@PathVariable("id") Long id, @RequestHeader("token") String token) {
+        userService.authenticateToken(token);
 
         User offlineUser = userService.logOut(id);
 
@@ -94,9 +97,8 @@ public class UserController {
     @PostMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public UserGetDTO modifyUser(@PathVariable("id") Long id, @RequestBody UserPostDTO userPostDTO) {
-
-        System.out.println("I'm in modifyuser()");
+    public UserGetDTO modifyUser(@PathVariable("id") Long id, @RequestBody UserPostDTO userPostDTO, @RequestHeader("token") String token) {
+        userService.authenticateToken(token);
 
         // convert API user to internal representation
         User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);

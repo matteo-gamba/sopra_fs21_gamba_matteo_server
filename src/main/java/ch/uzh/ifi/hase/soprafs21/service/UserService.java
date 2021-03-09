@@ -43,7 +43,7 @@ public class UserService {
         newUser.setToken(UUID.randomUUID().toString());
         newUser.setStatus(UserStatus.OFFLINE);
         newUser.setCreationDate(LocalDate.now());
-
+        System.out.println("Token is: " + newUser.getToken());
         checkIfUserExists(newUser);
 
         // saves the given entity but data is only persisted in the database once flush() is called
@@ -106,12 +106,24 @@ public class UserService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user with id="+ id +" was not found");
     }
 
+    public boolean authenticateToken(String token) {
+        User userToken = this.userRepository.findByToken(token);
+        System.out.println("token: " + token);
+        if(token.equals("1")) return true; // "1" done for postman testing
+        if(userToken == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Token could not be authenticated");
+        }
+        return true;
+    }
+
     public User modifyUser(Long id, User userInput) {
         var userToBeModified = this.userRepository.findById(id);
         if (userToBeModified.isPresent()) {
             log.info("User has been modified: {}", userToBeModified);
-            userToBeModified.get().setUsername(userInput.getUsername());
-            log.info(userInput.getBirthdate().toString());
+            if(!userInput.getUsername().trim().equals("")){
+                userToBeModified.get().setUsername(userInput.getUsername());
+            }
+            //log.info(userInput.getBirthdate().toString());
             userToBeModified.get().setBirthdate(userInput.getBirthdate());
             return userToBeModified.get();
         }
