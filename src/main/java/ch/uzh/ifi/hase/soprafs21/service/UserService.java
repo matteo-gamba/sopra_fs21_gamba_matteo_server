@@ -119,11 +119,10 @@ public class UserService {
     public User modifyUser(Long id, User userInput) {
         var userToBeModified = this.userRepository.findById(id);
         if (userToBeModified.isPresent()) {
-            log.info("User has been modified: {}", userToBeModified);
             if(!userInput.getUsername().trim().equals("")){
                 userToBeModified.get().setUsername(userInput.getUsername());
             }
-            //log.info(userInput.getBirthdate().toString());
+
             userToBeModified.get().setBirthdate(userInput.getBirthdate());
             return userToBeModified.get();
         }

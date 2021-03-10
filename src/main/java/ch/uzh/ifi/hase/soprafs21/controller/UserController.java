@@ -84,7 +84,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @ResponseBody
     public UserGetDTO logoutUser(@PathVariable("id") Long id, @RequestHeader("token") String token) {
         userService.authenticateToken(token);
